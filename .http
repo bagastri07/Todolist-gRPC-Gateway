@@ -1,0 +1,25 @@
+POST http://localhost:7001/todo
+content-type: application/json
+
+{
+    "toDo": {
+        "title": "Mencintai Dia",
+        "description": "Harus S-Grade"
+    }
+}
+###
+GET  http://localhost:7001/todo/1
+###
+GET http://localhost:7001/todo
+###
+PUT http://localhost:7001/todo
+content-type: application/json
+
+{
+    "todo": {
+        "id": 2,
+        "title": "Membuat Kopi",
+        "description": "Harus S-Grade",
+        "completed": 0
+    }
+}
