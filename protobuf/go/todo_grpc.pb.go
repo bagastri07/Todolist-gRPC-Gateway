@@ -28,6 +28,8 @@ type ToDoServiceClient interface {
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	// Read all todo tasks
 	ReadAll(ctx context.Context, in *ReadAllRequest, opts ...grpc.CallOption) (*ReadAllResponse, error)
+	//markComplete
+	MarkComplete(ctx context.Context, in *MarkRequest, opts ...grpc.CallOption) (*MarkResponse, error)
 }
 
 type toDoServiceClient struct {
@@ -83,6 +85,15 @@ func (c *toDoServiceClient) ReadAll(ctx context.Context, in *ReadAllRequest, opt
 	return out, nil
 }
 
+func (c *toDoServiceClient) MarkComplete(ctx context.Context, in *MarkRequest, opts ...grpc.CallOption) (*MarkResponse, error) {
+	out := new(MarkResponse)
+	err := c.cc.Invoke(ctx, "/todo.ToDoService/MarkComplete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ToDoServiceServer is the server API for ToDoService service.
 // All implementations should embed UnimplementedToDoServiceServer
 // for forward compatibility
@@ -97,6 +108,8 @@ type ToDoServiceServer interface {
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	// Read all todo tasks
 	ReadAll(context.Context, *ReadAllRequest) (*ReadAllResponse, error)
+	//markComplete
+	MarkComplete(context.Context, *MarkRequest) (*MarkResponse, error)
 }
 
 // UnimplementedToDoServiceServer should be embedded to have forward compatible implementations.
@@ -117,6 +130,9 @@ func (UnimplementedToDoServiceServer) Delete(context.Context, *DeleteRequest) (*
 }
 func (UnimplementedToDoServiceServer) ReadAll(context.Context, *ReadAllRequest) (*ReadAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReadAll not implemented")
+}
+func (UnimplementedToDoServiceServer) MarkComplete(context.Context, *MarkRequest) (*MarkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MarkComplete not implemented")
 }
 
 // UnsafeToDoServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -220,6 +236,24 @@ func _ToDoService_ReadAll_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ToDoService_MarkComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ToDoServiceServer).MarkComplete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/todo.ToDoService/MarkComplete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ToDoServiceServer).MarkComplete(ctx, req.(*MarkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ToDoService_ServiceDesc is the grpc.ServiceDesc for ToDoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -246,6 +280,10 @@ var ToDoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReadAll",
 			Handler:    _ToDoService_ReadAll_Handler,
+		},
+		{
+			MethodName: "MarkComplete",
+			Handler:    _ToDoService_MarkComplete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

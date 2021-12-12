@@ -101,3 +101,23 @@ func (r *TodoRepository) DeleteTodo(req *todo.DeleteRequest) (*todo.DeleteRespon
 		Deleted: int32(result.RowsAffected),
 	}, nil
 }
+
+func (r *TodoRepository) MarkToDo(req *todo.MarkRequest) (*todo.MarkResponse, error) {
+	var todoData model.Todo
+
+	if err := r.dbClient.Where("ID = ?", req.Id).First(&todoData).Error; err != nil {
+		return nil, err
+	}
+
+	todoData.Completed = 1
+
+	result := r.dbClient.Save(&todoData)
+
+	if err := result.Error; err != nil {
+		return nil, err
+	}
+
+	return &todo.MarkResponse{
+		MarkedId: todoData.ID,
+	}, nil
+}

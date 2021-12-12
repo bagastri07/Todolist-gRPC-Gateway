@@ -44,6 +44,13 @@ service ToDoService {
             get: "/todo"
           };
     };
+
+    //markComplete
+    rpc MarkComplete(MarkRequest) returns (MarkResponse) {
+        option (google.api.http) = {
+            put: "/todo/mark/{id}" 
+          };
+    };
 }
 
 // Taks we have to do
@@ -116,4 +123,15 @@ message ReadAllRequest{}
 // Contains list of all todo tasks
 message ReadAllResponse{
     repeated ToDo toDos = 1;
+}
+
+// to mark complete
+message MarkRequest{
+    // Unique integer identifier of the todo task to mark as complete
+    int32 id = 1;
+}
+
+// response after mark complete
+message MarkResponse{
+    int32 markedId = 1;
 }

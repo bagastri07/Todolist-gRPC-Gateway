@@ -86,3 +86,15 @@ func (server *TodoServiceServer) ReadAll(ctx context.Context, req *todo.ReadAllR
 
 	return todoData, nil
 }
+
+func (server *TodoServiceServer) MarkComplete(ctx context.Context, req *todo.MarkRequest) (*todo.MarkResponse, error) {
+	todoRepository := repositories.NewTodoRepository()
+
+	todoData, err := todoRepository.MarkToDo(req)
+
+	if err != nil {
+		return nil, fmt.Errorf("error update todo: %v", err)
+	}
+
+	return todoData, nil
+}

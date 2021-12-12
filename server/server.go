@@ -26,7 +26,7 @@ func main() {
 		log.Fatalln(http.ListenAndServe("localhost:7001", mux))
 	}()
 
-	lis, err := net.Listen("tcp", ":7000")
+	lis, err := net.Listen("tcp", "localhost:7000")
 	if err != nil {
 		log.Fatalf("Failed to listen to the port: %v", err)
 	}
