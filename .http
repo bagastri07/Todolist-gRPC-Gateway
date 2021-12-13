@@ -3,8 +3,8 @@ content-type: application/json
 
 {
     "toDo": {
-        "title": "Mencintai Dia",
-        "description": "Harus S-Grade"
+        "title": "Belajar Youtube",
+        "description": "Cara membuat simple"
     }
 }
 ###
@@ -24,4 +24,6 @@ content-type: application/json
     }
 }
 ###
-DELETE http://localhost:7001/todo/4
+DELETE http://localhost:7001/todo/3
+###
+PUT http://localhost:7001/todo/mark/4
